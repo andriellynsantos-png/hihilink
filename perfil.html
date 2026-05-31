@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WrmLink — Perfil</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <header class="topo">
+    <a href="index.html" class="logo">
+      <span class="logo-icon">W</span>
+      WrmLink
+    </a>
+    <nav class="menu">
+      <a href="inicio.html">Início</a>
+      <a href="perfil.html" class="active">Perfil</a>
+      <a href="explorar.html">Explorar</a>
+      <a href="feed.html">Feed</a>
+      <a href="login.html" class="btn-login">Login</a>
+      <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()">☀️</button>
+    </nav>
+  </header>
+
+  <main class="pagina-perfil">
+    <section class="perfil-banner">
+      <div class="overlay"></div>
+
+      <div class="perfil-conteudo">
+
+        <!-- Foto -->
+        <div class="foto-perfil-wrapper" title="Clique para trocar a foto">
+          <input type="file" id="inputFoto" accept="image/*">
+          <img class="foto-perfil" id="fotoPerfil" src="img/minhafoto.jpg"
+            alt="Foto do aluno"
+            onerror="this.src='https://i.pravatar.cc/200?img=1'">
+          <div class="foto-overlay-edit">
+            <span style="font-size:20px;">📷</span>
+            <span>Trocar foto</span>
+          </div>
+        </div>
+
+        <!-- Nome -->
+        <h1>Andriellyn</h1>
+
+        <!-- Badges -->
+        <div class="perfil-badges">
+          <span class="badge-verificado">✓ Aluno WRM Verificado</span>
+          <span class="badge-turma">📚 DS · 2026</span>
+        </div>
+
+        <!-- Turma -->
+        <p class="turma">2º Ano • Desenvolvimento de Sistemas • AGV</p>
+
+        <!-- Bio -->
+        <div class="bio-wrapper">
+          <p class="bio" id="bioTexto">
+            Estudante, criativa e apaixonada por tecnologia, design e projetos escolares.
+          </p>
+          <textarea class="bio-edit-area" id="bioTextarea" placeholder="Escreva sua bio..."></textarea>
+
+          <div class="bio-acoes">
+            <button class="btn-perfil" id="btnEditarBio" onclick="editarBio()">✏️ Editar bio</button>
+            <button class="btn-perfil primary-btn" id="btnSalvarBio" onclick="salvarBio()" style="display:none;">✅ Salvar</button>
+            <button class="btn-perfil" id="btnCancelarBio" onclick="cancelarBio()" style="display:none;">✕ Cancelar</button>
+            <button class="btn-perfil" onclick="copiarLink()">🔗 Copiar link</button>
+            <button class="btn-perfil" onclick="compartilharPerfil()">📤 Compartilhar</button>
+          </div>
+        </div>
+
+        <!-- Info boxes -->
+        <div class="info-perfil">
+          <div class="info-box">
+            <strong id="views">248</strong>
+            <span>Visualizações</span>
+          </div>
+          <div class="info-box">
+            <strong id="totalSeguidores">34</strong>
+            <span>Seguidores</span>
+          </div>
+          <div class="info-box">
+            <strong style="color:#4ade80;">● Online</strong>
+            <span>Status</span>
+          </div>
+          <div class="info-box">
+            <strong>4</strong>
+            <span>Links</span>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Links -->
+    <section class="links-perfil">
+      <h2>Meus Links</h2>
+      <div class="lista-links">
+        <a href="https://www.instagram.com/driarievilo/" target="_blank" rel="noopener noreferrer" class="link-card">
+          📸 Instagram
+          <span class="link-arrow">→</span>
+        </a>
+        <a href="https://github.com/" target="_blank" rel="noopener noreferrer" class="link-card">
+          💻 GitHub
+          <span class="link-arrow">→</span>
+        </a>
+        <a href="https://open.spotify.com/user/31csvzrqxfkkp3v7pdm5b7pzxygm" target="_blank" rel="noopener noreferrer" class="link-card">
+          🎵 Spotify
+          <span class="link-arrow">→</span>
+        </a>
+        <a href="https://www.tiktok.com/@dri_arievilo" target="_blank" rel="noopener noreferrer" class="link-card">
+          🎬 TikTok
+          <span class="link-arrow">→</span>
+        </a>
+      </div>
+    </section>
+
+    <!-- Personalização -->
+    <section class="personalizacao">
+      <h2>Personalização</h2>
+
+      <div class="temas">
+        <button class="tema-btn active" data-tema="padrao" onclick="trocarTema('padrao')">🔵 Padrão</button>
+        <button class="tema-btn" data-tema="rosa" onclick="trocarTema('rosa')">🌸 Rosa</button>
+        <button class="tema-btn" data-tema="verde" onclick="trocarTema('verde')">🌿 Verde</button>
+        <button class="tema-btn" data-tema="roxo" onclick="trocarTema('roxo')">💜 Roxo</button>
+        <button class="tema-btn" data-tema="solar" onclick="trocarTema('solar')">🌅 Solar</button>
+      </div>
+
+      <button class="salvar-tema-btn" onclick="salvarTema()">💾 Salvar tema</button>
+    </section>
+  </main>
+
+  <footer class="rodape">
+    <p>© 2026 WrmLink — Projeto escolar</p>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
