@@ -145,7 +145,7 @@ function initFotoPerfil() {
     leitor.onload = function (ev) {
       fotoPerfil.src = ev.target.result;
       localStorage.setItem("fotoPerfil", ev.target.result);
-      showToast("📸 Foto atualizada!", "success");
+      showToast("Foto atualizada!", "success");
     };
     leitor.readAsDataURL(arquivo);
   });
@@ -209,7 +209,7 @@ function cancelarBio() {
 function copiarLink() {
   const url = window.location.href;
   navigator.clipboard.writeText(url).then(() => {
-    showToast("🔗 Link copiado!", "success");
+    showToast("Link copiado!", "success");
   }).catch(() => {
     showToast("Link: " + url);
   });
@@ -352,7 +352,7 @@ function criarPostagem() {
   lista.prepend(novoPost);
   textoEl.value = "";
   imagemInput.value = "";
-  showToast("✅ Postagem publicada!", "success");
+  showToast("✓ Postagem publicada!", "success");
 }
 
 /* ── FEED: LIMPAR CAMPO ── */
@@ -382,7 +382,7 @@ function fazerLogin() {
     showToast("Preencha todos os campos!", "error");
     return;
   }
-  showToast("✅ Login realizado!", "success");
+  showToast("Login realizado!", "success");
   setTimeout(() => window.location.href = "inicio.html", 800);
 }
 
@@ -395,7 +395,7 @@ function fazerCadastro() {
     showToast("Preencha todos os campos!", "error");
     return;
   }
-  showToast("✅ Cadastro realizado!", "success");
+  showToast("✓ Cadastro realizado!", "success");
   setTimeout(() => window.location.href = "inicio.html", 800);
 }
 
@@ -405,6 +405,7 @@ document.addEventListener("DOMContentLoaded", function () {
   initViews();
   initSeguidores();
   initFotoPerfil();
+  initNavPill();
 
   const temaSalvo = localStorage.getItem("temaPerfil");
   if (temaSalvo) {
@@ -427,3 +428,40 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   });
 });
+
+/* ── GLASS NAV PILL ── */
+function initNavPill() {
+  const menu = document.querySelector('.menu');
+  if (!menu) return;
+
+  const pill = document.createElement('div');
+  pill.style.cssText = `
+    position: absolute;
+    background: rgba(255,255,255,0.18);
+    backdrop-filter: blur(8px);
+    border-radius: 999px;
+    transition: all 0.3s cubic-bezier(.4,0,.2,1);
+    pointer-events: none;
+    z-index: 0;
+  `;
+  menu.appendChild(pill);
+
+  function moverPill(el) {
+    pill.style.width = el.offsetWidth + 'px';
+    pill.style.height = el.offsetHeight + 'px';
+    pill.style.left = el.offsetLeft + 'px';
+    pill.style.top = el.offsetTop + 'px';
+  }
+
+  const ativo = menu.querySelector('a.active');
+  if (ativo) moverPill(ativo);
+
+  menu.querySelectorAll('a').forEach(link => {
+    link.addEventListener('mouseenter', () => moverPill(link));
+    link.addEventListener('mouseleave', () => {
+      const atual = menu.querySelector('a.active');
+      if (atual) moverPill(atual);
+      else pill.style.width = '0';
+    });
+  });
+}
