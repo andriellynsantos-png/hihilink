@@ -5,6 +5,129 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>WrmLink — Perfil</title>
   <link rel="stylesheet" href="style.css">
+  <style>
+
+    /* SEGUINDO */
+    .seguir-section {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 20px;
+    }
+    .btn-seguir-perfil {
+      background: var(--accent);
+      color: white;
+      border: none;
+      padding: 11px 28px;
+      border-radius: var(--radius-md);
+      font-weight: 700;
+      font-size: 14px;
+      cursor: pointer;
+      transition: all var(--transition);
+      font-family: var(--font-display);
+    }
+    .btn-seguir-perfil:hover {
+      background: var(--accent-hover);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(59,130,246,0.3);
+    }
+    .btn-seguir-perfil.seguindo {
+      background: rgba(255,255,255,0.12);
+      border: 1px solid rgba(255,255,255,0.2);
+      color: white;
+    }
+    .btn-seguir-perfil.seguindo:hover {
+      background: rgba(248,113,113,0.2);
+      border-color: rgba(248,113,113,0.4);
+      color: #f87171;
+    }
+
+    /* MODAL SEGUIDORES/SEGUINDO */
+    .modal-bg {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.6);
+      backdrop-filter: blur(6px);
+      z-index: 500;
+      justify-content: center;
+      align-items: center;
+    }
+    .modal-bg.open { display: flex; }
+    .modal-box {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-xl);
+      padding: 28px;
+      width: 320px;
+      max-width: 90%;
+      box-shadow: var(--shadow);
+      animation: fadeInUp 0.25s ease;
+    }
+    .modal-box h3 {
+      font-family: var(--font-display);
+      font-size: 18px;
+      font-weight: 700;
+      margin-bottom: 18px;
+      color: var(--text-primary);
+    }
+    .modal-user {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 0;
+      border-bottom: 1px solid var(--border);
+      cursor: pointer;
+      transition: all var(--transition);
+      border-radius: var(--radius-sm);
+    }
+    .modal-user:hover { opacity: 0.75; }
+    .modal-user:last-of-type { border-bottom: none; }
+    .modal-avatar {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      background: var(--accent-soft);
+      border: 2px solid rgba(59,130,246,0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--accent);
+      font-family: var(--font-display);
+      flex-shrink: 0;
+    }
+    .modal-nome { font-weight: 700; font-size: 14px; color: var(--text-primary); }
+    .modal-turma { font-size: 12px; color: var(--text-muted); }
+    .modal-fechar {
+      width: 100%;
+      margin-top: 18px;
+      padding: 11px;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border);
+      background: var(--bg-card);
+      color: var(--text-secondary);
+      font-weight: 700;
+      font-size: 14px;
+      cursor: pointer;
+      transition: all var(--transition);
+      font-family: var(--font-body);
+    }
+    .modal-fechar:hover {
+      background: var(--bg-card-hover);
+      border-color: var(--border-hover);
+      color: var(--text-primary);
+    }
+
+    /* Info boxes clicáveis */
+    .info-box.clicavel { cursor: pointer; }
+    .info-box.clicavel:hover {
+      background: rgba(255,255,255,0.2);
+      border-color: rgba(255,255,255,0.3);
+    }
+  </style>
 </head>
 <body>
 
@@ -20,6 +143,7 @@
       <a href="feed.html">Feed</a>
       <a href="login.html" class="btn-login">Login</a>
       <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()">☀️</button>
+      <a href="configuracoes.html" class="btn-config-header" title="Configurações">⚙️</a>
     </nav>
   </header>
 
@@ -32,26 +156,26 @@
         <!-- Foto -->
         <div class="foto-perfil-wrapper" title="Clique para trocar a foto">
           <input type="file" id="inputFoto" accept="image/*">
-          <img class="foto-perfil" id="fotoPerfil" src="img/minhafoto.jpg"
+          <img class="foto-perfil" id="fotoPerfil" src="img/musa.jpg"
             alt="Foto do aluno"
-            onerror="this.src='https://i.pravatar.cc/200?img=1'">
+            onerror="this.src='img/musa.jpg';">
           <div class="foto-overlay-edit">
             <span style="font-size:20px;">📷</span>
             <span>Trocar foto</span>
           </div>
         </div>
 
-        <!-- Nome -->
-        <h1>Andriellyn</h1>
+        <!-- Nome dinâmico -->
+        <h1 id="nomeUsuario">Andriellyn</h1>
 
         <!-- Badges -->
         <div class="perfil-badges">
           <span class="badge-verificado">✓ Aluno WRM Verificado</span>
-          <span class="badge-turma">📚 DS · 2026</span>
+          <span class="badge-turma" id="badgeTurma"> DS 2 · 2026</span>
         </div>
 
-        <!-- Turma -->
-        <p class="turma">2º Ano • Desenvolvimento de Sistemas • AGV</p>
+        <!-- Turma dinâmica -->
+        <p class="turma" id="turmaUsuario">...</p>
 
         <!-- Bio -->
         <div class="bio-wrapper">
@@ -59,13 +183,12 @@
             Estudante, criativa e apaixonada por tecnologia, design e projetos escolares.
           </p>
           <textarea class="bio-edit-area" id="bioTextarea" placeholder="Escreva sua bio..."></textarea>
-
           <div class="bio-acoes">
-            <button class="btn-perfil" id="btnEditarBio" onclick="editarBio()">✏️ Editar bio</button>
-            <button class="btn-perfil primary-btn" id="btnSalvarBio" onclick="salvarBio()" style="display:none;">✅ Salvar</button>
+            <button class="btn-perfil" id="btnEditarBio" onclick="editarBio()"> Editar bio</button>
+            <button class="btn-perfil primary-btn" id="btnSalvarBio" onclick="salvarBio()" style="display:none;"> Salvar</button>
             <button class="btn-perfil" id="btnCancelarBio" onclick="cancelarBio()" style="display:none;">✕ Cancelar</button>
-            <button class="btn-perfil" onclick="copiarLink()">🔗 Copiar link</button>
-            <button class="btn-perfil" onclick="compartilharPerfil()">📤 Compartilhar</button>
+            <button class="btn-perfil" onclick="copiarLink()"> Copiar link</button>
+            <button class="btn-perfil" onclick="compartilharPerfil()"> Compartilhar</button>
           </div>
         </div>
 
@@ -75,9 +198,13 @@
             <strong id="views">248</strong>
             <span>Visualizações</span>
           </div>
-          <div class="info-box">
+          <div class="info-box clicavel" onclick="abrirModal('seguidores')" title="Ver seguidores">
             <strong id="totalSeguidores">34</strong>
             <span>Seguidores</span>
+          </div>
+          <div class="info-box clicavel" onclick="abrirModal('seguindo')" title="Ver quem você segue">
+            <strong id="totalSeguindo">12</strong>
+            <span>Seguindo</span>
           </div>
           <div class="info-box">
             <strong style="color:#4ade80;">● Online</strong>
@@ -89,6 +216,11 @@
           </div>
         </div>
 
+        <!-- Botão Seguir -->
+        <div class="seguir-section">
+          <button class="btn-seguir-perfil" id="btnSeguir" onclick="toggleSeguir()">+ Seguir</button>
+        </div>
+
       </div>
     </section>
 
@@ -97,20 +229,16 @@
       <h2>Meus Links</h2>
       <div class="lista-links">
         <a href="https://www.instagram.com/driarievilo/" target="_blank" rel="noopener noreferrer" class="link-card">
-          📸 Instagram
-          <span class="link-arrow">→</span>
+           Instagram <span class="link-arrow">→</span>
         </a>
         <a href="https://github.com/" target="_blank" rel="noopener noreferrer" class="link-card">
-          💻 GitHub
-          <span class="link-arrow">→</span>
+           GitHub <span class="link-arrow">→</span>
         </a>
         <a href="https://open.spotify.com/user/31csvzrqxfkkp3v7pdm5b7pzxygm" target="_blank" rel="noopener noreferrer" class="link-card">
-          🎵 Spotify
-          <span class="link-arrow">→</span>
+           Spotify <span class="link-arrow">→</span>
         </a>
         <a href="https://www.tiktok.com/@dri_arievilo" target="_blank" rel="noopener noreferrer" class="link-card">
-          🎬 TikTok
-          <span class="link-arrow">→</span>
+           TikTok <span class="link-arrow">→</span>
         </a>
       </div>
     </section>
@@ -118,16 +246,14 @@
     <!-- Personalização -->
     <section class="personalizacao">
       <h2>Personalização</h2>
-
       <div class="temas">
-        <button class="tema-btn active" data-tema="padrao" onclick="trocarTema('padrao')">🔵 Padrão</button>
-        <button class="tema-btn" data-tema="rosa" onclick="trocarTema('rosa')">🌸 Rosa</button>
-        <button class="tema-btn" data-tema="verde" onclick="trocarTema('verde')">🌿 Verde</button>
-        <button class="tema-btn" data-tema="roxo" onclick="trocarTema('roxo')">💜 Roxo</button>
-        <button class="tema-btn" data-tema="solar" onclick="trocarTema('solar')">🌅 Solar</button>
+        <button class="tema-btn active" data-tema="padrao" onclick="trocarTema('padrao')"> Padrão</button>
+        <button class="tema-btn" data-tema="rosa" onclick="trocarTema('rosa')"> Rosa</button>
+        <button class="tema-btn" data-tema="verde" onclick="trocarTema('verde')"> Verde</button>
+        <button class="tema-btn" data-tema="roxo" onclick="trocarTema('roxo')"> Roxo</button>
+        <button class="tema-btn" data-tema="solar" onclick="trocarTema('solar')"> Amarelo</button>
       </div>
-
-      <button class="salvar-tema-btn" onclick="salvarTema()">💾 Salvar tema</button>
+      <button class="salvar-tema-btn" onclick="salvarTema()"> Salvar tema</button>
     </section>
   </main>
 
@@ -135,6 +261,135 @@
     <p>© 2026 WrmLink — Projeto escolar</p>
   </footer>
 
+  <!-- MODAL SEGUIDORES / SEGUINDO -->
+  <div class="modal-bg" id="modalBg">
+    <div class="modal-box">
+      <h3 id="modalTitulo">Seguidores</h3>
+      <div id="modalLista"></div>
+      <button class="modal-fechar" onclick="fecharModal()">Fechar</button>
+    </div>
+  </div>
+
   <script src="script.js"></script>
+  <script>
+    /* ── DADOS SIMULADOS ── */
+    const dadosSeguidores = [
+      { nome: "Giovana", turma: "2º DS — AGV", inicial: "G" },
+      { nome: "Luan", turma: "2º DS — AGV", inicial: "L" },
+      { nome: "Paulo", turma: "2º DS — AGV", inicial: "P" },
+      { nome: "Entoin", turma: "1º BIO — AGV", inicial: "E" },
+    ];
+    const dadosSeguindo = [
+      { nome: "Mickael", turma: "2º ADM — AGV", inicial: "M" },
+      { nome: "Gabriel", turma: "1º PRT — AGV", inicial: "G" },
+    ];
+
+    /* ── PERFIL DINÂMICO ── */
+function carregarPerfil() {
+
+    const nome = localStorage.getItem("wrmNome") || "Andriellyn";
+    const turma = localStorage.getItem("wrmTurma") || "2º Ano • Desenvolvimento de Sistemas • AGV";
+
+    document.getElementById("nomeUsuario").textContent = nome;
+    document.getElementById("turmaUsuario").textContent = turma;
+
+    const fotoSalva = localStorage.getItem("wrmFoto");
+
+    if (fotoSalva) {
+        document.getElementById("fotoPerfil").src = fotoSalva;
+    }
+}
+
+/* ── TROCAR FOTO ── */
+const inputFoto = document.getElementById("inputFoto");
+const fotoPerfil = document.getElementById("fotoPerfil");
+
+inputFoto.addEventListener("change", function () {
+
+    const arquivo = this.files[0];
+
+    if (arquivo) {
+
+        const leitor = new FileReader();
+
+        leitor.onload = function (e) {
+
+            fotoPerfil.src = e.target.result;
+
+            localStorage.setItem(
+                "wrmFoto",
+                e.target.result
+            );
+
+        };
+
+        leitor.readAsDataURL(arquivo);
+    }
+});
+    
+    /* ── SEGUIR / DEIXAR DE SEGUIR ── */
+    let estouSeguindo = localStorage.getItem("wrmSeguindoPerfil") === "true";
+
+    function toggleSeguir() {
+      estouSeguindo = !estouSeguindo;
+      localStorage.setItem("wrmSeguindoPerfil", estouSeguindo);
+      const btn = document.getElementById("btnSeguir");
+      const total = document.getElementById("totalSeguidores");
+      let n = parseInt(total.textContent);
+      if (estouSeguindo) {
+        btn.textContent = "✓ Seguindo";
+        btn.classList.add("seguindo");
+        total.textContent = n + 1;
+        showToast("Você está seguindo este perfil!", "success");
+      } else {
+        btn.textContent = "+ Seguir";
+        btn.classList.remove("seguindo");
+        total.textContent = Math.max(0, n - 1);
+        showToast("Você deixou de seguir.");
+      }
+    }
+
+    /* ── MODAL ── */
+    function abrirModal(tipo) {
+      const lista = tipo === "seguidores" ? dadosSeguidores : dadosSeguindo;
+      document.getElementById("modalTitulo").textContent =
+        tipo === "seguidores" ? `Seguidores (${lista.length})` : `Seguindo (${lista.length})`;
+      document.getElementById("modalLista").innerHTML = lista.map(u => `
+        <div class="modal-user">
+          <div class="modal-avatar">${u.inicial}</div>
+          <div>
+            <div class="modal-nome">${u.nome}</div>
+            <div class="modal-turma">${u.turma}</div>
+          </div>
+        </div>
+      `).join("");
+      document.getElementById("modalBg").classList.add("open");
+    }
+
+    function fecharModal() {
+      document.getElementById("modalBg").classList.remove("open");
+    }
+
+    /* Fechar modal clicando fora */
+    document.getElementById("modalBg").addEventListener("click", function(e) {
+      if (e.target === this) fecharModal();
+    });
+
+    /* Aplicar estado do botão seguir ao carregar */
+    document.addEventListener("DOMContentLoaded", function() {
+
+  carregarPerfil();
+
+  if (estouSeguindo) {
+    const btn = document.getElementById("btnSeguir");
+    btn.textContent = "✓ Seguindo";
+    btn.classList.add("seguindo");
+  }
+
+});
+    document.addEventListener("DOMContentLoaded", function() {
+    carregarPerfil();
+});
+  </script>
 </body>
 </html>
