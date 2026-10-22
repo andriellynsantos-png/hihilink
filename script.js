@@ -1,4 +1,4 @@
-/* WrmLink — script.js */
+/* Loom — script.js */
 
 /* ── THEME (dark/light) ── */
 function initTheme() {
@@ -42,10 +42,10 @@ function showToast(msg, type = "") {
 function initViews() {
   const views = document.getElementById("views");
   if (!views) return;
-  let n = parseInt(localStorage.getItem("viewsWrmLink")) || 248;
+  let n = parseInt(localStorage.getItem("viewsLoom")) || 248;
   n++;
   views.textContent = n;
-  localStorage.setItem("viewsWrmLink", n);
+  localStorage.setItem("viewsLoom", n);
 }
 
 /* ── SEGUIDORES ── */
@@ -216,7 +216,7 @@ function copiarLink() {
 }
 
 function compartilharPerfil() {
-  const dados = { title: "WrmLink — Andriellyn", text: "Confira meu perfil no WrmLink!", url: window.location.href };
+  const dados = { title: "Loom — Andriellyn", text: "Confira meu perfil no Loom!", url: window.location.href };
   if (navigator.share) {
     navigator.share(dados).catch(() => copiarLink());
   } else {
